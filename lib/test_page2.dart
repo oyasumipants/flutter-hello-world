@@ -14,7 +14,7 @@ class TestPage2 extends StatelessWidget {
               onPressed: () => {Navigator.of(context).pushNamed("/test3")},
               child: const Text("進む", style: TextStyle(fontSize: 80))),
           TextButton(
-              onPressed: () => {Navigator.of(context).pushNamed("/test1")},
+              onPressed: () => {Navigator.of(context).pop("/test1")},
               child: const Text("戻る", style: TextStyle(fontSize: 80)))
         ])));
   }
