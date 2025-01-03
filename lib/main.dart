@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,33 +56,45 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  bool _flag = false;
 
-  void _incrementCounter() {
+  // ボタンタップ時にフラグを切り替える
+  _click() async {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-      print("HelloWorld");
-    });
-  }
-
-  void _decrementCounter() {
-    setState(() {
-      _counter--;
-      print("Decrement: $_counter");
+      _flag = !_flag;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Icon(FontAwesomeIcons.gift, color: Colors.teal),
+      appBar: AppBar(
+        title: Text(widget.title),
       ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            AnimatedContainer(
+                duration: const Duration(seconds: 3),
+                width: _flag ? 100 : 50,
+                height: _flag ? 50 : 100,
+                padding:
+                    _flag ? const EdgeInsets.all(0) : const EdgeInsets.all(30),
+                margin:
+                    _flag ? const EdgeInsets.all(0) : const EdgeInsets.all(30),
+                transform: _flag ? Matrix4.skewX(0.0) : Matrix4.skewX(0.3),
+                color: _flag ? Colors.blue : Colors.grey),
+            AnimatedSwitcher(
+                duration: const Duration(seconds: 3),
+                child: _flag
+                    ? const Text("なにもない")
+                    : const Icon(Icons.favorite, color: Colors.pink))
+          ],
+        ),
+      ),
+      floatingActionButton:
+          FloatingActionButton(onPressed: _click, child: const Icon(Icons.add)),
     );
   }
 }
