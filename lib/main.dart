@@ -10,19 +10,31 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        // This is the theme of your application.
+        //
+        // TRY THIS: Try running your application with "flutter run". You'll see
+        // the application has a purple toolbar. Then, without quitting the app,
+        // try changing the seedColor in the colorScheme below to Colors.green
+        // and then invoke "hot reload" (save your changes or press the "hot
+        // reload" button in a Flutter-supported IDE, or press "r" if you used
+        // the command line to start the app).
+        //
+        // Notice that the counter didn't reset back to zero; the application
+        // state is not lost during the reload. To reset the state, use hot
+        // restart instead.
+        //
+        // This works for code too, not just values: Most code changes can be
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+        useMaterial3: true,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-      routes: {
-        "/test1": (BuildContext context) => TestPage1(),
-        "/test2": (BuildContext context) => TestPage2(),
-        "/test3": (BuildContext context) => TestPage3(),
-      },
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -46,20 +58,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late PageController _pageController;
+  int _selectedIndex = 0;
+
+  // ページの配列
+  final _pages = [
+    TestPage1(),
+    TestPage2(),
+    TestPage3(),
+  ];
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed("/test1");
-          },
-          child: const Text("Test1へ"),
-        ),
-      ),
-    );
+        body: PageView(
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            children: _pages));
   }
 }
